@@ -21,6 +21,7 @@ RedirectMatch 404 /\.(?!well-known/)
 
 # 内部用ディレクトリ
 RedirectMatch 404 ^/_private(/|$)
+RedirectMatch 404 \.code-workspace$
 
 # ---------------------------------------------
 # セキュリティヘッダー
