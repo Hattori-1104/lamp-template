@@ -1,0 +1,28 @@
+name: lamp-demo
+services:
+  web:
+    build:
+      context: .
+      # .envの値をDockerfileに渡す。
+      args:
+        APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT}
+    ports: ["8080:80"]
+    volumes: ["../..:${APACHE_DOCUMENT_ROOT}"]
+    # Linuxで動かすのに必須
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
+  db:
+    # 8.0 最も実績が豊富なバージョン
+    image: mysql:8.0
+    ports: ["3306:3306"]
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

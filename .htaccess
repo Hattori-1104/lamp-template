@@ -1,0 +1,32 @@
+# ディレクトリ一覧を表示しない
+Options -Indexes
+
+# ---------------------------------------------
+# HTTP → HTTPS リダイレクト
+# 開発環境（APP_ENV=dev）ではリダイレクトしない
+# ---------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{ENV:APP_ENV} !^dev$
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------------------------------------------
+# 公開しないパス
+# ---------------------------------------------
+# ドットファイル・ドットフォルダー（.git, .env, .devcontainer.json など）
+# Let's Encrypt などで使う .well-known は除外
+RedirectMatch 404 /\.(?!well-known/)
+
+# 内部用ディレクトリ
+RedirectMatch 404 ^/_private(/|$)
+
+# ---------------------------------------------
+# セキュリティヘッダー
+# ---------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

@@ -1,0 +1,24 @@
+{
+    "name": "lamp-demo",
+    "dockerComposeFile": "./_private/docker/compose.yml",
+    "service": "web",
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // PHP & Apache
+                "bmewburn.vscode-intelephense-client",
+                "mrmlnc.vscode-apache",
+
+                // フロント
+                "biomejs.biome",
+                "Anthropic.claude-code",
+                "bradlc.vscode-tailwindcss",
+
+                // その他
+                "mhutchie.git-graph",
+                "ms-azuretools.vscode-containers"
+            ]
+        }
+    }
+}
