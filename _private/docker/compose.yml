@@ -6,7 +6,8 @@ services:
       # .envの値をDockerfileに渡す。
       args:
         APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT}
-    ports: ["8080:80"]
+    # 127.0.0.1 に限定し、LAN など外部から接続されないようにする
+    ports: ["127.0.0.1:8080:80"]
     volumes: ["../..:${APACHE_DOCUMENT_ROOT}"]
     # Linuxで動かすのに必須
     extra_hosts:
@@ -15,7 +16,8 @@ services:
   db:
     # 8.0 最も実績が豊富なバージョン
     image: mysql:8.0
-    ports: ["3306:3306"]
+    # ホストの DB クライアント用。127.0.0.1 に限定する
+    ports: ["127.0.0.1:3306:3306"]
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: appdb

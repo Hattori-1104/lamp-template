@@ -23,6 +23,10 @@ RedirectMatch 404 /\.(?!well-known/)
 RedirectMatch 404 ^/_private(/|$)
 RedirectMatch 404 \.code-workspace$
 
+# パッケージマネージャーのファイル（ライブラリの中身・バージョン情報）
+RedirectMatch 404 ^/(vendor|node_modules)(/|$)
+RedirectMatch 404 /(composer\.(json|lock)|package(-lock)?\.json)$
+
 # ---------------------------------------------
 # セキュリティヘッダー
 # ---------------------------------------------
