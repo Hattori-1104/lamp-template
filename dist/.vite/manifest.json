@@ -1,20 +1,39 @@
 {
+  "_island-module-Dfvzj6n2.js": {
+    "file": "assets/island-module-Dfvzj6n2.js",
+    "name": "island-module"
+  },
   "src/islands/ExampleIsland.tsx": {
-    "file": "assets/ExampleIsland-DvYNxiC8.js",
+    "file": "assets/ExampleIsland-BGYS3Dq4.js",
     "name": "ExampleIsland",
     "src": "src/islands/ExampleIsland.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "src/main.tsx"
+      "src/main.tsx",
+      "_island-module-Dfvzj6n2.js"
+    ]
+  },
+  "src/islands/pages/FormPage.tsx": {
+    "file": "assets/FormPage-BLFhP_f8.js",
+    "name": "FormPage",
+    "src": "src/islands/pages/FormPage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/main.tsx",
+      "_island-module-Dfvzj6n2.js"
     ]
   },
   "src/main.tsx": {
-    "file": "assets/main-W6WsPiSj.js",
+    "file": "assets/main-SwJFpfeE.js",
     "name": "main",
     "src": "src/main.tsx",
     "isEntry": true,
     "dynamicImports": [
-      "src/islands/ExampleIsland.tsx"
+      "src/islands/ExampleIsland.tsx",
+      "src/islands/pages/FormPage.tsx"
+    ],
+    "css": [
+      "assets/main-B2VE6WIS.css"
     ]
   }
 }

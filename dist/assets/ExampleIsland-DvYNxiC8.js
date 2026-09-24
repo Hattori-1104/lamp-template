@@ -1,1 +1,0 @@
-import{i as e,n as t,r as n,t as r}from"./main-W6WsPiSj.js";function i(e){return e}var a=e(),o=r(),s=i({propsSchema:t({message:n()}),Component({message:e}){let[t,n]=(0,a.useState)(0);return(0,o.jsxs)(`div`,{children:[(0,o.jsxs)(`div`,{children:[`ホットリロード: `,e]}),(0,o.jsxs)(`button`,{type:`button`,onClick:()=>n(e=>e+1),children:[`Count: `,t]})]})}});export{s as default};

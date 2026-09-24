@@ -1,0 +1,1 @@
+import{t as e}from"./main-SwJFpfeE.js";import{t}from"./island-module-Dfvzj6n2.js";var n=e(),r=t({Component(){return(0,n.jsx)(`div`,{children:`Form`})}});export{r as default};

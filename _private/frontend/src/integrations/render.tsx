@@ -16,7 +16,7 @@ export async function renderIslands() {
     for (const elm of elements) {
         const islandId = elm.dataset[DATASET_ID_ISLAND]
         if (!isValidIslandId(islandId)) {
-            console.log(`スキップしました：${islandId}`)
+            console.warn(`スキップしました：${islandId}`)
             continue
         }
 
