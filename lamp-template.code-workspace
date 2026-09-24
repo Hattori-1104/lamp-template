@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "Frontend (./_private/frontend",
+			"path": "./_private/frontend"
+		},
+		{
 			"name": "Apache Document Root (/var/www/html)",
 			"path": "."
 		},

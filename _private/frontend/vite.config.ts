@@ -2,6 +2,7 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
 import fs from "node:fs"
+import tailwindcss from '@tailwindcss/vite'
 
 // ドキュメントルート（リポジトリのルート）直下に置く
 // ドットファイルなので .htaccess の非公開ルールで自動的に隠れる
@@ -29,7 +30,8 @@ function hotFile(): Plugin {
 export default defineConfig(({command}) => ({
   plugins: [
     react(),
-    hotFile()
+    hotFile(),
+    tailwindcss()
   ],
   resolve: {
     tsconfigPaths: true,
