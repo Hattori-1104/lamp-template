@@ -6,8 +6,11 @@ services:
       # .envの値をDockerfileに渡す。
       args:
         APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT}
+        DEV_UID: ${DEV_UID}
+        DEV_GID: ${DEV_GID}
     # 127.0.0.1 に限定し、LAN など外部から接続されないようにする
-    ports: ["127.0.0.1:8080:80"]
+    # 5173 は Vite の開発サーバー（HMR）用
+    ports: ["127.0.0.1:8080:80", "127.0.0.1:5173:5173"]
     volumes: ["../..:${APACHE_DOCUMENT_ROOT}"]
     # Linuxで動かすのに必須
     extra_hosts:

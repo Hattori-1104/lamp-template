@@ -1,6 +1,12 @@
 # 依存パッケージ（ビルド成果物だけをコミットする）
 node_modules/
 
+# Vite開発サーバー起動時に生成される（本番には存在しない）
+.vite-hot
+
+# TypeScriptのビルドキャッシュ
+*.tsbuildinfo
+
 # OS・エディター
 .DS_Store
 Thumbs.db

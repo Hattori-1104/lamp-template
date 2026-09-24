@@ -3,6 +3,9 @@
     "dockerComposeFile": "./_private/docker/compose.yml",
     "service": "web",
     "workspaceFolder": "/var/www/html",
+    // Apache自体はコンテナ内でroot起動のまま。VS Codeのターミナル／タスクだけをこのユーザーで開く。
+    // （ホストのUID/GIDは _private/docker/.env の DEV_UID / DEV_GID で指定）
+    "remoteUser": "dev",
     "customizations": {
         "vscode": {
             "extensions": [

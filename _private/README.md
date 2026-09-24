@@ -18,18 +18,59 @@
 /var/www/html/                     ← ドキュメントルート ＝ リポジトリのルート
 ├── .htaccess                      公開設定。非公開パスを 404 にするルールもここ
 ├── index.php                      公開
+├── dist/                          Viteのビルド成果物                    （公開・コミットする）
+├── .vite-hot                      Vite開発サーバーのURL（起動中のみ存在）（非公開・コミットしない）
 ├── .devcontainer.json             Dev Container の定義                 （非公開）
 ├── .gitignore                                                         （非公開）
 ├── .vscode/settings.json          エクスプローラーで _private を隠す設定  （非公開）
 ├── lamp-template.code-workspace   開発用のワークスペース（下記参照）      （非公開）
 └── _private/                                                          （非公開）
     ├── README.md                  このファイル
+    ├── app/
+    │   └── helpers/vite.php       PHPからVite/Reactを呼び出すヘルパー（vite() / island()）
+    ├── frontend/                  React（Vite）のソース一式
+    │   ├── package.json / vite.config.ts / tsconfig*.json
+    │   └── src/
+    │       ├── main.tsx                      エントリーポイント（アイランドを描画）
+    │       ├── integrations/                 island定義・レジストリ・描画ロジック
+    │       └── islands/                      PHPから呼び出す個々のReactコンポーネント
     └── docker/
         ├── .env                   compose 用の変数（APACHE_DOCUMENT_ROOT）
         ├── compose.yml            web / db コンテナの定義
-        ├── Dockerfile             web コンテナ（PHP 8.3 + Apache）
+        ├── Dockerfile             web コンテナ（PHP 8.3 + Apache + Bun）
         └── apache/project.conf    Apache の追加設定（開発環境のみ）
 ```
+
+## React連携（Islandアーキテクチャ）
+
+`_private/frontend/` に Vite + React のプロジェクトを置いています。PHP側のテンプレートに `island()` を書くだけで、その位置にReactコンポーネントが描画されます（[php-react-integrate](../../php-react-integrate) の技術基盤を移植したものです）。
+
+### 使い方
+
+1. `_private/frontend/src/islands/` に新しいコンポーネントを作成する（`ExampleIsland.tsx` を参考に、`defineIsland()` でラップする）。
+2. `_private/frontend/src/integrations/registry.tsx` の `REGISTRY` に追記する。
+3. PHPのテンプレートで `<?= island("コンポーネント名", ["props" => "値"]) ?>` のように呼び出す。
+4. `<head>` に `<?= vite() ?>` と `<?= island_preloads() ?>` を置く（`index.php` を参照）。
+
+### 開発時とビルド時の違い
+
+- **開発サーバー起動中**（`.vite-hot` が存在する）：PHPはViteの開発サーバー（`http://localhost:5173`）からモジュールを読み込み、ホットリロードが効きます。
+- **開発サーバー停止中**：PHPは `dist/.vite/manifest.json` を見て、ビルド済みのJS/CSSを読み込みます。
+
+```bash
+# コンテナ内（VS Codeのターミナル）で実行
+cd _private/frontend
+bun install       # 初回のみ
+bun run dev       # 開発サーバー起動（http://localhost:5173）
+bun run build     # 本番用ビルド（dist/ に出力）
+```
+
+VS Codeのターミナルを使わずホストから直接実行する場合は、ファイルの所有者がずれないように `--user dev` を付けてください（[コンテナ内のユーザーとファイルの所有者](#コンテナ内のユーザーとファイルの所有者)を参照）。
+
+### 本番へのリリース時の注意
+
+**本番サーバーではビルドを実行しません。** 必ずローカル（開発環境）で `bun run build` を実行し、生成された `dist/` をコミットしてからアップロードしてください。
+`_private/frontend/node_modules/` はコミットしない（`.gitignore` 参照）ため、本番にBun/JavaScriptランタイムは不要です（`Dockerfile` にBunを入れているのもビルド・開発サーバー用であり、Apache が実行時にBunへ依存することはありません）。
 
 ## 非公開にする仕組み
 
@@ -73,6 +114,20 @@
      公開するファイルと開発専用のファイルを混同しないよう、普段の開発はこのワークスペースで行ってください。
 
 `Dockerfile` や `compose.yml` を変更したときは **Dev Containers: Rebuild Container** を実行してください。
+
+### コンテナ内のユーザーとファイルの所有者
+
+Apache自体はコンテナ内で**root**として起動します（80番ポートにbindするために必要）。
+一方で、VS Codeのターミナルやタスクは、`.devcontainer.json` の `remoteUser` 設定により、ホストのユーザーとUID/GIDを合わせた **`dev`** ユーザーで開かれます。
+そのため、VS Code内のターミナルで `bun install` などを実行して新しくできるファイルは、ホスト側でも自分（実行ユーザー）の所有になります。
+
+ホストのUIDが `1000` 以外の場合は、`_private/docker/.env` の `DEV_UID` / `DEV_GID` を `id -u` / `id -g` の結果に合わせてから、コンテナを再ビルドしてください。
+
+**注意**：VS Codeを介さずホストのシェルから直接 `docker compose exec` する場合は、デフォルトが `root` になります。`dev` ユーザーで実行したいときは `--user dev` を付けてください。
+
+```bash
+docker compose exec --user dev -w /var/www/html/_private/frontend web bun install
+```
 
 ### 接続先
 
