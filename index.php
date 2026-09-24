@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <?php echo "php" ?>
+    <?php echo "Lamp Template" ?>
 </body>
 </html>

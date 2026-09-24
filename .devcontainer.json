@@ -1,5 +1,5 @@
 {
-    "name": "lamp-demo",
+    "name": "lamp-template",
     "dockerComposeFile": "./_private/docker/compose.yml",
     "service": "web",
     "workspaceFolder": "/var/www/html",

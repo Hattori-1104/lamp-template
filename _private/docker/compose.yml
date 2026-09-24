@@ -1,4 +1,4 @@
-name: lamp-demo
+name: lamp-template
 services:
   web:
     build:
