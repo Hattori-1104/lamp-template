@@ -13,6 +13,10 @@ ENV APACHE_DOCUMENT_ROOT=${APACHE_DOCUMENT_ROOT}
 RUN sed -ri 's!DocumentRoot /var/www/html!DocumentRoot ${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/000-default.conf
 
+# MySQL 接続用の拡張（ベースイメージには含まれない）
+# 本番の `php -m` と見比べて、必要な拡張があればここに追加する。
+RUN docker-php-ext-install pdo_mysql mysqli
+
 # Apache の追加設定
 COPY apache/project.conf /etc/apache2/conf-available/project.conf
 RUN a2enconf project
